@@ -11,24 +11,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
   <style>
     :root {
-      --bg: #0c1426;
-      --bg-2: #0f1b32;
-      --panel: #121f34;
-      --panel-alt: #162747;
-      --panel-soft: rgba(255,255,255,0.035);
-      --border: rgba(164, 192, 229, 0.18);
-      --board-light: #f0d9b6;
-      --board-dark: #b58863;
-      --board-light-2: #e2caa0;
-      --board-dark-2: #a67f57;
+      --bg: #0d1424;
+      --bg-2: #101c32;
+      --panel: #162847;
+      --panel-2: #0e1a2f;
+      --border: rgba(156, 186, 225, 0.16);
       --text: #edf4ff;
-      --muted: #aabfe0;
+      --muted: #afc3e8;
+      --light: #f0d9b5;
+      --dark: #b58863;
       --accent: #52d0ff;
       --accent-2: #72efb4;
-      --danger: #ff637d;
-      --warning: #ffcb68;
-      --shadow: rgba(0, 0, 0, 0.28);
-      --square-size: min(8.8vw, 78px);
+      --warning: #ffcc66;
+      --danger: #ff6b7d;
+      --shadow: rgba(0, 0, 0, 0.35);
     }
 
     * { box-sizing: border-box; }
@@ -36,10 +32,7 @@
     html, body {
       margin: 0;
       min-height: 100%;
-      background:
-        radial-gradient(circle at top, rgba(30, 80, 160, 0.45), transparent 32%),
-        radial-gradient(circle at bottom, rgba(0, 0, 0, 0.28), transparent 35%),
-        linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 42%, #070d17 100%);
+      background: radial-gradient(circle at top, rgba(82, 208, 255, 0.12), transparent 30%), linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 48%, #070d16 100%);
       color: var(--text);
       font-family: 'Inter', sans-serif;
     }
@@ -52,35 +45,33 @@
     }
 
     .app {
-      width: min(1360px, 100%);
+      width: min(1280px, 100%);
       min-height: 860px;
-      background: rgba(12, 19, 31, 0.9);
+      background: rgba(12, 18, 31, 0.9);
       border: 1px solid var(--border);
-      border-radius: 22px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 0 26px 64px var(--shadow);
-      backdrop-filter: blur(14px);
+      box-shadow: 0 30px 80px var(--shadow);
     }
 
     .topbar {
-      height: 86px;
-      border-bottom: 1px solid var(--border);
-      background: rgba(12, 19, 31, 0.92);
+      height: 84px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 22px;
+      padding: 16px 20px;
+      background: rgba(14, 22, 35, 0.92);
+      border-bottom: 1px solid var(--border);
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 0.9rem;
-      letter-spacing: 0.11em;
       text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 0.8rem;
       font-weight: 800;
-      color: var(--text);
     }
 
     .brand-mark {
@@ -89,30 +80,48 @@
       display: grid;
       place-items: center;
       border-radius: 12px;
-      background: linear-gradient(135deg, var(--accent) 0%, #8a7bff 100%);
-      color: #061522;
-      box-shadow: 0 12px 22px rgba(82, 208, 255, 0.35);
+      background: linear-gradient(135deg, var(--accent), #8a7bff);
+      color: #051622;
+      box-shadow: 0 12px 24px rgba(82, 208, 255, 0.35);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .button, .pill, .mode-btn, .elo-btn, .small-btn, .promo-btn {
-      border-radius: 12px;
+    .button,
+    .pill,
+    .mode-btn,
+    .elo-btn,
+    .small-btn,
+    .promo-btn {
+      font-family: inherit;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.025);
       color: var(--text);
+      border-radius: 12px;
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.2s ease, background 0.2s ease;
-      font-family: inherit;
       font-weight: 700;
     }
 
-    .button, .pill, .mode-btn, .promo-btn {
+    .button:hover,
+    .pill:hover,
+    .mode-btn:hover,
+    .elo-btn:hover,
+    .small-btn:hover,
+    .promo-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(130, 176, 255, 0.55);
+    }
+
+    .pill,
+    .button,
+    .mode-btn,
+    .promo-btn {
       height: 42px;
       padding: 0 16px;
       display: inline-flex;
@@ -121,34 +130,28 @@
       gap: 8px;
     }
 
-    .button:hover, .pill:hover, .mode-btn:hover, .elo-btn:hover, .small-btn:hover, .promo-btn:hover {
-      transform: translateY(-1px);
-      border-color: rgba(130, 176, 255, 0.55);
-    }
-
     .pill {
       color: var(--muted);
       border-style: dashed;
-      background: rgba(255,255,255,0.01);
     }
 
     .promo-btn {
-      background: linear-gradient(135deg, rgba(82,208,255,0.16), rgba(138,123,255,0.14));
+      background: linear-gradient(135deg, rgba(82,208,255,0.12), rgba(138,123,255,0.14));
       border-color: rgba(82,208,255,0.42);
     }
 
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 360px;
-      min-height: calc(100vh - 86px - 36px);
+      min-height: calc(100vh - 84px - 36px);
     }
 
     .board-panel {
       display: flex;
       flex-direction: column;
-      padding: 18px 16px 18px 18px;
+      padding: 18px 18px 18px 22px;
       border-right: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(15, 23, 38, 0.85) 0%, rgba(9, 14, 24, 0.92) 100%);
+      background: linear-gradient(180deg, rgba(16, 23, 34, 0.85), rgba(9, 14, 24, 0.95));
     }
 
     .toolbar {
@@ -156,7 +159,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 2px 8px 18px;
+      padding: 2px 6px 18px;
     }
 
     .mode-group {
@@ -167,27 +170,27 @@
     }
 
     .mode-btn {
+      min-width: 90px;
       background: rgba(255,255,255,0.02);
-      min-width: 92px;
     }
 
-    .mode-btn.active, .elo-btn.active {
-      background: linear-gradient(135deg, rgba(82,208,255,0.17), rgba(114,239,180,0.15));
-      border-color: rgba(82,208,255,0.44);
-      box-shadow: inset 0 0 1px 1px rgba(82,208,255,0.1);
+    .mode-btn.active,
+    .elo-btn.active {
+      background: linear-gradient(135deg, rgba(82,208,255,0.14), rgba(114,239,180,0.12));
+      border-color: rgba(82,208,255,0.46);
+      box-shadow: inset 0 0 0 1px rgba(82,208,255,0.08);
     }
 
     .board-shell {
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       flex: 1;
-      padding: 8px 8px 6px 0;
+      padding: 8px 8px 4px 0;
     }
 
     .board-wrap {
-      position: relative;
-      width: min(78vw, 730px);
+      width: min(78vw, 720px);
       aspect-ratio: 1;
       border-radius: 18px;
       overflow: hidden;
@@ -208,33 +211,33 @@
       display: grid;
       place-items: center;
       border: none;
-      outline: none;
+      margin: 0;
+      padding: 0;
       cursor: pointer;
       user-select: none;
-      padding: 0;
-      margin: 0;
-      transition: box-shadow 0.12s ease, transform 0.12s ease;
-      font-size: clamp(1.8rem, 2vw, 2.8rem);
+      transition: box-shadow 0.12s ease;
     }
 
-    .square.light { background: var(--board-light); }
-    .square.dark { background: var(--board-dark); }
-    .square:hover { box-shadow: inset 0 0 0 2px rgba(17, 92, 150, 0.44); }
-    .square.selected { box-shadow: inset 0 0 0 4px rgba(19, 109, 255, 0.9); }
+    .square.light { background: var(--light); }
+    .square.dark { background: var(--dark); }
+    .square:hover { box-shadow: inset 0 0 0 2px rgba(18, 90, 155, 0.45); }
+    .square.selected { box-shadow: inset 0 0 0 4px rgba(22, 110, 255, 0.9); }
     .square.lastmove { box-shadow: inset 0 0 0 3px rgba(255,255,255,0.58); }
+
     .square.movable::after {
       content: "";
       position: absolute;
       width: 22%;
       height: 22%;
       border-radius: 50%;
-      background: rgba(28, 39, 56, 0.46);
+      background: rgba(22, 31, 41, 0.45);
     }
+
     .square.capture::after {
       content: "";
       position: absolute;
-      inset: 9%;
-      border: 4px solid rgba(255, 80, 96, 0.8);
+      inset: 10%;
+      border: 4px solid rgba(255, 91, 102, 0.8);
       border-radius: 50%;
     }
 
@@ -253,24 +256,23 @@
       line-height: 1;
     }
 
-    .white-piece i { color: #f9fbff; }
+    .white-piece i { color: #ffffff; }
     .black-piece i { color: #101926; }
 
     .bottom-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 12px 8px 2px;
+      padding: 12px 8px 4px;
     }
 
     .status-pill {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       flex: 1;
-      min-height: 56px;
+      min-height: 54px;
       padding: 12px 16px;
       background: rgba(255,255,255,0.025);
       border: 1px solid var(--border);
@@ -285,14 +287,13 @@
       border-radius: 50%;
       background: var(--accent-2);
       box-shadow: 0 0 16px rgba(114,239,180,0.7);
-      flex-shrink: 0;
     }
 
     .sidebar {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      background: rgba(12, 19, 31, 0.9);
+      background: rgba(12, 18, 31, 0.9);
       padding: 18px 18px 16px;
     }
 
@@ -308,10 +309,10 @@
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
-      font-size: 0.7rem;
+      color: var(--muted);
+      font-size: 0.68rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
     }
 
     .score-row {
@@ -334,18 +335,17 @@
     .avatar {
       width: 34px;
       height: 34px;
-      border-radius: 50%;
       display: grid;
       place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #7c73ff, #52d0ff);
       font-weight: 800;
       font-size: 0.8rem;
-      color: white;
-      background: linear-gradient(135deg, #7d73ff, #50d2ff);
-      box-shadow: 0 12px 24px rgba(125,115,255,0.28);
+      box-shadow: 0 12px 24px rgba(124,115,255,0.25);
     }
 
     .avatar.dark {
-      background: linear-gradient(135deg, #1d2940, #0d1522);
+      background: linear-gradient(135deg, #202f48, #0d1624);
       box-shadow: 0 12px 24px rgba(16, 23, 34, 0.45);
     }
 
@@ -355,36 +355,32 @@
     }
 
     .player-tag {
-      font-size: 0.7rem;
       color: var(--muted);
+      font-size: 0.7rem;
     }
 
     .player-elo {
-      font-weight: 800;
-      font-size: 1.02rem;
       color: var(--warning);
+      font-weight: 800;
+      font-size: 1rem;
     }
 
     .elo-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
-      margin-top: 6px;
     }
 
     .elo-btn {
       height: 42px;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
     }
 
-    .elo-btn .tier { color: var(--muted); font-weight: 600; }
-
     .move-list {
-      max-height: 300px;
+      max-height: 280px;
       overflow-y: auto;
       padding-right: 4px;
     }
@@ -393,7 +389,6 @@
       display: grid;
       grid-template-columns: 46px 1fr 1fr;
       gap: 8px;
-      align-items: center;
       padding: 8px 0;
       border-bottom: 1px solid rgba(255,255,255,0.04);
       font-size: 0.82rem;
@@ -413,16 +408,15 @@
     .room-code {
       flex: 1;
       min-height: 42px;
-      border-radius: 12px;
-      background: rgba(0,0,0,0.08);
-      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      letter-spacing: 0.10em;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      letter-spacing: 0.08em;
       font-weight: 800;
-      color: var(--text);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
     }
 
     .small-btn {
@@ -431,19 +425,21 @@
       font-size: 0.8rem;
     }
 
-    @media (max-width: 1000px) {
-      .layout { grid-template-columns: 1fr; }
-      .board-panel { border-right: none; border-bottom: 1px solid var(--border); }
-      .board-shell { padding-right: 0; }
+    @media (max-width: 980px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .board-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
     }
 
     @media (max-width: 620px) {
       body { padding: 10px; }
       .topbar { padding: 12px 14px; }
-      .toolbar { gap: 8px; }
-      .brand { letter-spacing: 0.06em; }
-      .header-actions { gap: 8px; }
-      .button, .pill, .mode-btn, .promo-btn { height: 38px; padding: 0 10px; }
+      .brand { letter-spacing: 0.05em; }
       .board-wrap { width: min(92vw, 560px); }
     }
   </style>
@@ -465,13 +461,13 @@
     <div class="layout">
       <main class="board-panel">
         <div class="toolbar">
-          <div class="mode-group" id="modeGroup">
+          <div class="mode-group">
             <button class="mode-btn active" data-mode="local">Local</button>
             <button class="mode-btn" data-mode="bot">Bot</button>
             <button class="mode-btn" data-mode="online">Online</button>
           </div>
 
-          <div class="board-controls" style="display:flex; gap:8px; flex-wrap:wrap;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button class="small-btn" id="flipBtn"><i class="fa-solid fa-arrows-rotate"></i> Flip</button>
             <button class="small-btn" id="undoBtn"><i class="fa-solid fa-undo"></i> Undo</button>
           </div>
@@ -479,7 +475,7 @@
 
         <div class="board-shell">
           <div class="board-wrap">
-            <div id="board" aria-label="Chess Board"></div>
+            <div id="board" aria-label="Chess board"></div>
           </div>
         </div>
 
@@ -527,15 +523,15 @@
             <span>Levels</span>
           </div>
           <div class="elo-grid" id="eloGrid">
-            <button class="elo-btn active" data-elo="100"><span class="tier">100</span></button>
-            <button class="elo-btn" data-elo="300"><span class="tier">300</span></button>
-            <button class="elo-btn" data-elo="600"><span class="tier">600</span></button>
-            <button class="elo-btn" data-elo="1000"><span class="tier">1000</span></button>
-            <button class="elo-btn" data-elo="1500"><span class="tier">1500</span></button>
-            <button class="elo-btn" data-elo="2000"><span class="tier">2000</span></button>
-            <button class="elo-btn" data-elo="2500"><span class="tier">2500</span></button>
-            <button class="elo-btn" data-elo="3000"><span class="tier">3000</span></button>
-            <button class="elo-btn" data-elo="HELL" style="grid-column:1 / -1;"><span class="tier">HELL</span></button>
+            <button class="elo-btn active" data-elo="100"><span>100</span></button>
+            <button class="elo-btn" data-elo="300"><span>300</span></button>
+            <button class="elo-btn" data-elo="600"><span>600</span></button>
+            <button class="elo-btn" data-elo="1000"><span>1000</span></button>
+            <button class="elo-btn" data-elo="1500"><span>1500</span></button>
+            <button class="elo-btn" data-elo="2000"><span>2000</span></button>
+            <button class="elo-btn" data-elo="2500"><span>2500</span></button>
+            <button class="elo-btn" data-elo="3000"><span>3000</span></button>
+            <button class="elo-btn" data-elo="HELL" style="grid-column:1 / -1;"><span>HELL</span></button>
           </div>
         </section>
 
@@ -563,34 +559,47 @@
 
   <script>
     const boardEl = document.getElementById('board');
-    const moveListEl = document.getElementById('moveList');
     const statusTextEl = document.getElementById('statusText');
     const statusDotEl = document.getElementById('statusDot');
+    const moveListEl = document.getElementById('moveList');
+    const moveCountEl = document.getElementById('moveCount');
     const blackNameEl = document.getElementById('blackName');
     const blackTypeEl = document.getElementById('blackType');
     const blackEloEl = document.getElementById('blackElo');
     const whiteEloEl = document.getElementById('whiteElo');
     const matchBadgeEl = document.getElementById('matchBadge');
-    const moveCountEl = document.getElementById('moveCount');
     const roomCodeEl = document.getElementById('roomCode');
-
-    const boardLetters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const PIECE_VALUES = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+    const boardLetters = ['a','b','c','d','e','f','g','h'];
 
     const pieceIcons = {
-      w: { p: 'fa-chess-pawn', r: 'fa-chess-rook', n: 'fa-chess-knight', b: 'fa-chess-bishop', q: 'fa-chess-queen', k: 'fa-chess-king' },
-      b: { p: 'fa-chess-pawn', r: 'fa-chess-rook', n: 'fa-chess-knight', b: 'fa-chess-bishop', q: 'fa-chess-queen', k: 'fa-chess-king' }
+      w: {
+        p: 'fa-chess-pawn',
+        r: 'fa-chess-rook',
+        n: 'fa-chess-knight',
+        b: 'fa-chess-bishop',
+        q: 'fa-chess-queen',
+        k: 'fa-chess-king'
+      },
+      b: {
+        p: 'fa-chess-pawn',
+        r: 'fa-chess-rook',
+        n: 'fa-chess-knight',
+        b: 'fa-chess-bishop',
+        q: 'fa-chess-queen',
+        k: 'fa-chess-king'
+      }
     };
 
-    const centerBonus = [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 1, 1, 1, 1, 1, 0],
-      [0, 1, 2, 2, 2, 2, 1, 0],
-      [0, 1, 2, 3, 3, 2, 1, 0],
-      [0, 1, 2, 3, 3, 2, 1, 0],
-      [0, 1, 2, 2, 2, 2, 1, 0],
-      [0, 1, 1, 1, 1, 1, 1, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+    const pieceValues = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 20000 };
+    const centerWeight = [
+      [0,0,0,0,0,0,0,0],
+      [0,1,1,1,1,1,1,0],
+      [0,1,2,2,2,2,1,0],
+      [0,1,2,3,3,2,1,0],
+      [0,1,2,3,3,2,1,0],
+      [0,1,2,2,2,2,1,0],
+      [0,1,1,1,1,1,1,0],
+      [0,0,0,0,0,0,0,0]
     ];
 
     const state = {
@@ -601,25 +610,18 @@
       difficulty: '100',
       orientation: 'w',
       lastMove: null,
-      roomName: 'RAIN-0001',
-      onlineChannel: null,
-      history: [],
       isGameOver: false,
-      botThinking: false
+      history: [],
+      botBusy: false,
+      roomName: 'RAIN-0001',
+      onlineChannel: null
     };
 
-    function createRoomCode() {
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let out = 'RAIN-';
-      for (let i = 0; i < 4; i++) out += chars[Math.floor(Math.random() * chars.length)];
-      return out;
-    }
-
     function init() {
-      state.roomName = createRoomCode();
-      roomCodeEl.textContent = state.roomName;
       bindControls();
       setupOnlineChannel();
+      state.roomName = createRoomCode();
+      roomCodeEl.textContent = state.roomName;
       setMode('local');
       setDifficulty('100');
       renderBoard();
@@ -633,46 +635,41 @@
         setMode('bot');
         setDifficulty('HELL');
       });
-      document.getElementById('copyBtn').addEventListener('click', copyRoom);
       document.getElementById('flipBtn').addEventListener('click', () => {
         state.orientation = state.orientation === 'w' ? 'b' : 'w';
         renderBoard();
       });
       document.getElementById('undoBtn').addEventListener('click', undoMove);
+      document.getElementById('copyBtn').addEventListener('click', copyRoom);
 
-      document.querySelectorAll('.mode-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          setMode(btn.dataset.mode);
-        });
+      document.querySelectorAll('.mode-btn').forEach(button => {
+        button.addEventListener('click', () => setMode(button.dataset.mode));
       });
 
-      document.querySelectorAll('.elo-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          setDifficulty(btn.dataset.elo);
-        });
+      document.querySelectorAll('.elo-btn').forEach(button => {
+        button.addEventListener('click', () => setDifficulty(button.dataset.elo));
       });
     }
 
     function setMode(mode) {
       state.mode = mode;
-      document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+      document.querySelectorAll('.mode-btn').forEach(button => {
+        button.classList.toggle('active', button.dataset.mode === mode);
+      });
       matchBadgeEl.textContent = mode === 'local' ? 'Local' : mode === 'bot' ? 'Bot' : 'Online';
 
       if (mode === 'bot') {
         blackNameEl.textContent = 'Rain Bot';
         blackTypeEl.textContent = 'Engine';
-        blackEloEl.textContent = state.difficulty === 'HELL' ? 'INF' : String(state.difficulty);
-        whiteEloEl.textContent = '1200';
+        blackEloEl.textContent = state.difficulty === 'HELL' ? 'INF' : state.difficulty;
       } else if (mode === 'online') {
         blackNameEl.textContent = 'Guest';
         blackTypeEl.textContent = 'Online';
         blackEloEl.textContent = '1400';
-        whiteEloEl.textContent = '1200';
       } else {
         blackNameEl.textContent = 'Black';
         blackTypeEl.textContent = 'Bot';
-        blackEloEl.textContent = state.difficulty === 'HELL' ? 'INF' : String(state.difficulty);
-        whiteEloEl.textContent = '1200';
+        blackEloEl.textContent = state.difficulty === 'HELL' ? 'INF' : state.difficulty;
       }
 
       resetGame();
@@ -680,14 +677,16 @@
 
     function setDifficulty(level) {
       state.difficulty = level;
-      document.querySelectorAll('.elo-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.elo === level));
+      document.querySelectorAll('.elo-btn').forEach(button => {
+        button.classList.toggle('active', button.dataset.elo === level);
+      });
 
       if (state.mode === 'bot') {
-        blackEloEl.textContent = level === 'HELL' ? 'INF' : String(level);
+        blackEloEl.textContent = level === 'HELL' ? 'INF' : level;
       }
 
-      if (state.mode !== 'bot') {
-        blackEloEl.textContent = level === 'HELL' ? 'INF' : String(level);
+      if (state.mode === 'local') {
+        blackEloEl.textContent = level === 'HELL' ? 'INF' : level;
       }
     }
 
@@ -696,9 +695,9 @@
       state.selectedSquare = null;
       state.legalMoves = [];
       state.lastMove = null;
-      state.history = [];
       state.isGameOver = false;
-      state.botThinking = false;
+      state.history = [];
+      state.botBusy = false;
       renderBoard();
       updateStatus();
       updateMoveList();
@@ -707,29 +706,36 @@
 
     function undoMove() {
       if (state.history.length === 0) return;
-      const last = state.history.pop();
-      state.game.load(last.beforeFen);
+      const previous = state.history.pop();
+      state.game.load(previous.fen);
+      state.lastMove = previous.lastMove;
       state.selectedSquare = null;
       state.legalMoves = [];
-      state.lastMove = last.beforeLastMove;
-      state.isGameOver = false;
       renderBoard();
       updateStatus();
       updateMoveList();
-      if (state.mode === 'online') broadcastOnlineState();
+    }
+
+    function createRoomCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = 'RAIN-';
+      for (let i = 0; i < 4; i++) {
+        code += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return code;
     }
 
     function renderBoard() {
       boardEl.innerHTML = '';
-      const rows = state.orientation === 'w' ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
-      const cols = state.orientation === 'w' ? [0, 1, 2, 3, 4, 5, 6, 7] : [7, 6, 5, 4, 3, 2, 1, 0];
+      const rows = state.orientation === 'w' ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
+      const cols = state.orientation === 'w' ? [0,1,2,3,4,5,6,7] : [7,6,5,4,3,2,1,0];
 
       for (let rowIndex of rows) {
         for (let colIndex of cols) {
           const file = boardLetters[colIndex];
           const rank = 8 - rowIndex;
           const square = file + rank;
-          const piece = state.game.get(square);
+
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'square ' + (((rowIndex + colIndex) % 2 === 0) ? 'light' : 'dark');
@@ -738,19 +744,20 @@
           if (state.selectedSquare === square) btn.classList.add('selected');
           if (state.lastMove && (state.lastMove.from === square || state.lastMove.to === square)) btn.classList.add('lastmove');
 
-          if (state.legalMoves.some(m => m.to === square)) {
+          if (state.legalMoves.some(move => move.to === square)) {
             const move = state.legalMoves.find(m => m.to === square);
             if (move && move.flags.includes('c')) btn.classList.add('capture');
             else btn.classList.add('movable');
           }
 
+          const piece = state.game.get(square);
           if (piece) {
-            const pieceWrap = document.createElement('span');
-            pieceWrap.className = 'piece ' + (piece.color === 'w' ? 'white-piece' : 'black-piece');
+            const wrap = document.createElement('span');
+            wrap.className = 'piece ' + (piece.color === 'w' ? 'white-piece' : 'black-piece');
             const icon = document.createElement('i');
             icon.className = 'fa-solid ' + pieceIcons[piece.color][piece.type];
-            pieceWrap.appendChild(icon);
-            btn.appendChild(pieceWrap);
+            wrap.appendChild(icon);
+            btn.appendChild(wrap);
           }
 
           btn.addEventListener('click', () => handleSquareClick(square));
@@ -761,23 +768,21 @@
 
     function handleSquareClick(square) {
       if (state.isGameOver) return;
-      const turn = state.game.turn();
-
-      if (state.mode === 'bot' && turn === 'b') return;
+      if (state.mode === 'bot' && state.game.turn() === 'b') return;
       if (state.mode === 'online' && state.game.turn() === 'b') return;
 
       const piece = state.game.get(square);
       const selected = state.selectedSquare;
 
       if (selected) {
-        const move = state.legalMoves.find(m => m.to === square);
+        const move = state.legalMoves.find(item => item.to === square);
         if (move) {
           makeMove(move);
           return;
         }
       }
 
-      if (piece && piece.color === turn) {
+      if (piece && piece.color === state.game.turn()) {
         state.selectedSquare = square;
         state.legalMoves = state.game.moves({ square, verbose: true });
         renderBoard();
@@ -789,22 +794,15 @@
     }
 
     function makeMove(move) {
-      const beforeFen = state.game.fen();
-      const beforeLastMove = state.lastMove;
-      const result = state.game.move({
-        from: move.from,
-        to: move.to,
-        promotion: 'q'
-      });
-
+      const fenBefore = state.game.fen();
+      const previousLastMove = state.lastMove;
+      const result = state.game.move({ from: move.from, to: move.to, promotion: 'q' });
       if (!result) return;
 
+      state.lastMove = { from: move.from, to: move.to };
       state.selectedSquare = null;
       state.legalMoves = [];
-      state.lastMove = { from: move.from, to: move.to };
-      state.history.push({ beforeFen, beforeLastMove });
-
-      if (state.history.length > 300) state.history.shift();
+      state.history.push({ fen: fenBefore, lastMove: previousLastMove });
 
       renderBoard();
       updateStatus();
@@ -818,13 +816,32 @@
         return;
       }
 
-      if (state.mode === 'bot' && state.game.turn() === 'b' && !state.botThinking) {
-        state.botThinking = true;
-        window.setTimeout(() => {
-          botTurn();
-          state.botThinking = false;
-        }, 320);
+      if (state.mode === 'bot' && state.game.turn() === 'b') {
+        window.setTimeout(botTurn, 260);
       }
+    }
+
+    function updateStatus() {
+      const turn = state.game.turn();
+      let text = '';
+
+      if (state.game.isCheckmate()) {
+        text = turn === 'w' ? 'Black wins by checkmate' : 'White wins by checkmate';
+      } else if (state.game.isStalemate()) {
+        text = 'Draw by stalemate';
+      } else if (state.game.isThreefoldRepetition()) {
+        text = 'Draw by repetition';
+      } else if (state.game.isInsufficientMaterial()) {
+        text = 'Draw by insufficient material';
+      } else if (state.game.isDraw()) {
+        text = 'Draw';
+      } else {
+        text = turn === 'w' ? 'White to move' : 'Black to move';
+      }
+
+      statusTextEl.textContent = text;
+      statusDotEl.style.background = turn === 'w' ? 'var(--accent-2)' : 'var(--warning)';
+      statusDotEl.style.boxShadow = turn === 'w' ? '0 0 16px rgba(114,239,180,0.7)' : '0 0 16px rgba(255,204,102,0.7)';
     }
 
     function updateMoveList() {
@@ -836,8 +853,8 @@
         const row = document.createElement('div');
         row.className = 'move-row';
 
-        const no = document.createElement('span');
-        no.textContent = String(Math.floor(i / 2) + 1) + '.';
+        const moveNo = document.createElement('span');
+        moveNo.textContent = String(Math.floor(i / 2) + 1) + '.';
 
         const whiteMove = document.createElement('span');
         whiteMove.innerHTML = '<strong>' + (history[i]?.san || '') + '</strong>';
@@ -845,52 +862,33 @@
         const blackMove = document.createElement('span');
         blackMove.innerHTML = '<strong>' + (history[i + 1]?.san || '') + '</strong>';
 
-        row.append(no, whiteMove, blackMove);
+        row.appendChild(moveNo);
+        row.appendChild(whiteMove);
+        row.appendChild(blackMove);
         moveListEl.appendChild(row);
       }
     }
 
-    function updateStatus() {
-      const turn = state.game.turn();
-      let statusText = '';
-
-      if (state.game.isCheckmate()) {
-        statusText = turn === 'w' ? 'Black wins by checkmate' : 'White wins by checkmate';
-      } else if (state.game.isStalemate()) {
-        statusText = 'Draw by stalemate';
-      } else if (state.game.isThreefoldRepetition()) {
-        statusText = 'Draw by repetition';
-      } else if (state.game.isInsufficientMaterial()) {
-        statusText = 'Draw by insufficient material';
-      } else if (state.game.isDraw()) {
-        statusText = 'Draw';
-      } else {
-        statusText = turn === 'w' ? 'White to move' : 'Black to move';
-      }
-
-      statusTextEl.textContent = statusText;
-      statusDotEl.style.background = turn === 'w' ? 'var(--accent-2)' : 'var(--warning)';
-      statusDotEl.style.boxShadow = turn === 'w'
-        ? '0 0 16px rgba(114,239,180,0.7)'
-        : '0 0 16px rgba(255,203,104,0.7)';
-    }
-
     function botTurn() {
       if (state.game.isGameOver() || state.mode !== 'bot') return;
-      if (state.game.turn() !== 'b') return;
+      if (state.game.turn() !== 'b' || state.botBusy) return;
 
+      state.botBusy = true;
       const move = getBotMove();
-      if (!move) return;
+      if (!move) {
+        state.botBusy = false;
+        return;
+      }
+
       state.game.move({ from: move.from, to: move.to, promotion: 'q' });
       state.lastMove = { from: move.from, to: move.to };
-      state.history.push({ beforeFen: state.game.fen(), beforeLastMove: null });
+      state.selectedSquare = null;
+      state.history.push({ fen: state.game.fen(), lastMove: null });
+      state.botBusy = false;
+
       renderBoard();
       updateStatus();
       updateMoveList();
-      if (state.game.isGameOver()) {
-        state.isGameOver = true;
-        updateStatus();
-      }
     }
 
     function getBotMove() {
@@ -910,18 +908,14 @@
       };
 
       const depth = depthMap[state.difficulty] || 2;
-      const rootColor = 'b';
-      const orderedMoves = [...moves].sort((a, b) => heuristicMoveScore(b) - heuristicMoveScore(a));
-
-      let bestMove = orderedMoves[0];
       let bestScore = -Infinity;
+      let bestMove = moves[0];
 
-      for (const move of orderedMoves) {
-        state.game.move({ from: move.from, to: move.to, promotion: 'q' });
-        const score = minimax(state.game, depth - 1, -Infinity, Infinity, false, rootColor);
-        state.game.undo();
-
-        if (score > bestScore || (score === bestScore && Math.random() > 0.45)) {
+      for (const move of moves) {
+        const next = new Chess(state.game.fen());
+        next.move({ from: move.from, to: move.to, promotion: 'q' });
+        const score = minimax(next, depth - 1, -Infinity, Infinity, false);
+        if (score > bestScore) {
           bestScore = score;
           bestMove = move;
         }
@@ -930,101 +924,59 @@
       return bestMove;
     }
 
-    function heuristicMoveScore(move) {
-      let score = 0;
-      const piece = state.game.get(move.from);
-      const target = state.game.get(move.to);
-      if (target) score += PIECE_VALUES[target.type] * (target.color === 'w' ? 1 : -1) * 0.9;
-      if (piece) score += PIECE_VALUES[piece.type] * 0.05;
-      if (move.san && move.san.includes('+')) score += 50;
-      if (move.san && move.san.includes('#')) score += 200;
-      if (move.flags.includes('k') || move.flags.includes('q')) score += 15;
-      return score;
-    }
-
-    function minimax(game, depth, alpha, beta, maximizing, rootColor) {
+    function minimax(game, depth, alpha, beta, maximizing) {
       if (depth === 0 || game.isGameOver()) {
-        return evaluatePosition(game, rootColor);
+        return evaluateBoard(game);
       }
 
       const moves = game.moves({ verbose: true });
-      if (!moves.length) {
-        return evaluatePosition(game, rootColor);
-      }
+      if (!moves.length) return evaluateBoard(game);
 
       if (maximizing) {
-        let maxEval = -Infinity;
-        for (const move of orderMoves(moves)) {
-          game.move({ from: move.from, to: move.to, promotion: 'q' });
-          const value = minimax(game, depth - 1, alpha, beta, false, rootColor);
-          game.undo();
-          maxEval = Math.max(maxEval, value);
-          alpha = Math.max(alpha, value);
+        let best = -Infinity;
+        for (const move of moves) {
+          const next = new Chess(game.fen());
+          next.move({ from: move.from, to: move.to, promotion: 'q' });
+          const score = minimax(next, depth - 1, alpha, beta, false);
+          best = Math.max(best, score);
+          alpha = Math.max(alpha, score);
           if (beta <= alpha) break;
         }
-        return maxEval;
+        return best;
       }
 
-      let minEval = Infinity;
-      for (const move of orderMoves(moves)) {
-        game.move({ from: move.from, to: move.to, promotion: 'q' });
-        const value = minimax(game, depth - 1, alpha, beta, true, rootColor);
-        game.undo();
-        minEval = Math.min(minEval, value);
-        beta = Math.min(beta, value);
+      let best = Infinity;
+      for (const move of moves) {
+        const next = new Chess(game.fen());
+        next.move({ from: move.from, to: move.to, promotion: 'q' });
+        const score = minimax(next, depth - 1, alpha, beta, true);
+        best = Math.min(best, score);
+        beta = Math.min(beta, score);
         if (beta <= alpha) break;
       }
-      return minEval;
+      return best;
     }
 
-    function orderMoves(moves) {
-      return [...moves].sort((a, b) => {
-        const aScore = heuristicMoveScoreByObject(a);
-        const bScore = heuristicMoveScoreByObject(b);
-        return bScore - aScore;
-      });
-    }
-
-    function heuristicMoveScoreByObject(move) {
+    function evaluateBoard(game) {
       let score = 0;
-      const piece = state.game.get(move.from);
-      if (!piece) return score;
-      score += PIECE_VALUES[piece.type] * 0.2;
-      const target = state.game.get(move.to);
-      if (target) score += PIECE_VALUES[target.type] * 1.4;
-      if (move.san && move.san.includes('+')) score += 50;
-      if (move.san && move.san.includes('#')) score += 150;
-      return score;
-    }
-
-    function evaluatePosition(game, rootColor) {
-      let score = 0;
-
       const board = game.board();
+
       for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
           const piece = board[row][col];
           if (!piece) continue;
-          const value = PIECE_VALUES[piece.type];
-          const centerWeight = centerBonus[row][col] || 0;
-          const pieceScore = value + centerWeight * 8;
-          score += (piece.color === 'w' ? 1 : -1) * pieceScore;
+
+          const value = pieceValues[piece.type] + (centerWeight[row][col] * 8);
+          const signed = piece.color === 'w' ? value : -value;
+          score += signed;
         }
       }
 
-      const mobility = game.moves().length;
-      score += (game.turn() === rootColor ? 1 : -1) * mobility * 2;
-
       if (game.isCheckmate()) {
-        const winner = game.turn() === 'w' ? 'b' : 'w';
-        return winner === rootColor ? 1000000 : -1000000;
+        return (game.turn() === 'w') ? -1000000 : 1000000;
       }
 
-      if (game.isStalemate() || game.isInsufficientMaterial() || game.isThreefoldRepetition()) {
-        return 0;
-      }
-
-      return score * (rootColor === 'w' ? 1 : -1);
+      return score;
     }
 
     function setupOnlineChannel() {
@@ -1034,8 +986,9 @@
         const payload = event.data;
         if (!payload || payload.room !== state.roomName) return;
         if (payload.fen) {
-          const remote = new Chess(payload.fen);
-          state.game = remote;
+          state.game = new Chess(payload.fen);
+          state.selectedSquare = null;
+          state.legalMoves = [];
           renderBoard();
           updateStatus();
           updateMoveList();
@@ -1052,11 +1005,9 @@
       try {
         await navigator.clipboard.writeText(state.roomName);
         roomCodeEl.textContent = 'COPIED';
-        setTimeout(() => {
-          roomCodeEl.textContent = state.roomName;
-        }, 900);
-      } catch (err) {
-        roomCodeEl.textContent = 'ROOM READY';
+        setTimeout(() => { roomCodeEl.textContent = state.roomName; }, 900);
+      } catch (error) {
+        roomCodeEl.textContent = 'READY';
       }
     }
 
